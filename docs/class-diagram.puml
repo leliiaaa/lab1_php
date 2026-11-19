@@ -1,0 +1,197 @@
+@'
+@startuml
+title BookSwap Platform - Class Diagram
+skinparam classAttributeIconSize 0
+
+package "Controllers" {
+  class BookController {
+    + id: Integer
+    + requestCount: Integer
+    + defaultPageSize: Integer
+    + sortField: String
+    + sortDirection: String
+    + index(): List
+    + show(id: Integer): Book
+    + storeCopy(data: Map): Boolean
+    + updateCopy(id: Integer, data: Map): Boolean
+    + destroyCopy(id: Integer): Boolean
+  }
+
+  class ExchangeController {
+    + id: Integer
+    + maxActiveExchanges: Integer
+    + reservationHours: Integer
+    + defaultStatus: String
+    + notificationDriver: String
+    + index(): List
+    + show(id: Integer): ExchangeRequest
+    + store(data: Map): Boolean
+    + approve(id: Integer): Boolean
+    + confirmReturn(id: Integer): Boolean
+  }
+
+  class AdminController {
+    + id: Integer
+    + auditEnabled: Boolean
+    + itemsPerPage: Integer
+    + reportFormat: String
+    + accessRole: String
+    + dashboard(): Map
+    + manageCategories(data: Map): Boolean
+    + moderateCopy(copyId: Integer): Boolean
+    + resolveDispute(disputeId: Integer): Boolean
+    + blockUser(userId: Integer): Boolean
+  }
+}
+
+package "Models" {
+  class User {
+    + id: Integer
+    + name: String
+    + email: String
+    - passwordHash: String
+    + createdAt: DateTime
+    + register(): Boolean
+    + login(password: String): Boolean
+    + logout(): Void
+    + updateProfile(name: String): Boolean
+    + changePassword(password: String): Boolean
+  }
+
+  class ReaderProfile {
+    + readerId: Integer
+    + city: String
+    + phone: String
+    + rating: Decimal
+    + completedExchanges: Integer
+    + browseCatalog(): List
+    + addBookCopy(bookId: Integer): BookCopy
+    + requestExchange(copyId: Integer): ExchangeRequest
+    + addToWishlist(bookId: Integer): Void
+    + recalculateRating(): Decimal
+  }
+
+  class Administrator {
+    + adminId: Integer
+    + role: String
+    + permissions: String
+    + department: String
+    + isActive: Boolean
+    + addBook(data: Map): Boolean
+    + editBook(id: Integer): Boolean
+    + deleteBookCopy(copyId: Integer): Boolean
+    + resolveDispute(disputeId: Integer): Boolean
+    + generateReport(): String
+  }
+
+  class Category {
+    + id: Integer
+    + name: String
+    + description: String
+    + slug: String
+    + isActive: Boolean
+    + addBook(book: Book): Void
+    + removeBook(bookId: Integer): Void
+    + getBooks(): List
+    + updateName(name: String): Void
+    + setActive(active: Boolean): Void
+  }
+
+  class Book {
+    + id: Integer
+    + title: String
+    + author: String
+    + isbn: String
+    + categoryId: Integer
+    + getDetails(): String
+    + updateTitle(title: String): Void
+    + updateIsbn(isbn: String): Void
+    + getCopies(): List
+    + hasAvailableCopies(): Boolean
+  }
+
+  class BookCopy {
+    + id: Integer
+    + bookId: Integer
+    + ownerId: Integer
+    + condition: String
+    + status: String
+    + getDetails(): String
+    + markReserved(): Void
+    + markAvailable(): Void
+    + updateCondition(condition: String): Void
+    + isAvailable(): Boolean
+  }
+
+  class Wishlist {
+    + id: Integer
+    + readerId: Integer
+    + notifyEnabled: Boolean
+    + createdAt: DateTime
+    + updatedAt: DateTime
+    + addBook(bookId: Integer): Void
+    + removeBook(bookId: Integer): Void
+    + toggleNotify(): Void
+    + getItems(): List
+    + countItems(): Integer
+  }
+
+  class ExchangeRequest {
+    + id: Integer
+    + copyId: Integer
+    + requesterId: Integer
+    + status: String
+    + createdAt: DateTime
+    + createRequest(): Boolean
+    + approveRequest(): Boolean
+    + rejectRequest(): Boolean
+    + completeExchange(): Boolean
+    + getSummary(): String
+  }
+
+  class DeliveryDetail {
+    + id: Integer
+    + exchangeId: Integer
+    + method: String
+    + address: String
+    + trackingNumber: String
+    + getFullDeliveryInfo(): String
+    + updateAddress(address: String): Void
+    + setTrackingNumber(code: String): Void
+    + validateDelivery(): Boolean
+    + isPostal(): Boolean
+  }
+
+  class Review {
+    + id: Integer
+    + exchangeId: Integer
+    + authorId: Integer
+    + rating: Integer
+    + comment: String
+    + submitReview(): Boolean
+    + updateComment(text: String): Void
+    + isValidRating(): Boolean
+    + hideReview(): Void
+    + getDetails(): String
+  }
+}
+
+Administrator --|> User
+ReaderProfile --|> User
+Category "1" o-- "0..*" Book
+Book "1" *-- "1..*" BookCopy
+ReaderProfile "1" -- "0..*" BookCopy
+ReaderProfile "1" -- "0..1" Wishlist
+Wishlist "1" -- "0..*" Book
+ReaderProfile "1" -- "0..*" ExchangeRequest
+BookCopy "1" -- "0..*" ExchangeRequest
+ExchangeRequest "1" *-- "1" DeliveryDetail
+ExchangeRequest "1" -- "0..2" Review
+
+BookController ..> Book
+BookController ..> BookCopy
+ExchangeController ..> ExchangeRequest
+AdminController ..> Administrator
+AdminController ..> Category
+@enduml
+'@ | Set-Content -Path docs\class-diagram.puml -Encoding utf8
