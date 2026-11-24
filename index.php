@@ -34,7 +34,7 @@ $discountFinally = '';
 try {
     Services\applyDiscount(500.0, 150.0);
 } catch (Exception $e) {
-    $discountError = 'Помилка: ' . $e->getMessage();
+    $discountError = 'Помилка: '.$e->getMessage();
 } finally {
     $discountFinally = 'Завершення спроби розрахунку.';
 }
