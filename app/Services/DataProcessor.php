@@ -34,7 +34,7 @@ function moveDigitsFirst(string $input): string
 {
     $chars = preg_split('//u', $input, -1, PREG_SPLIT_NO_EMPTY) ?: [];
     $digits = array_filter($chars, static fn (string $ch): bool => ctype_digit($ch));
-    $others = array_filter($chars, static fn (string $ch): bool => !ctype_digit($ch));
+    $others = array_filter($chars, static fn (string $ch): bool => ! ctype_digit($ch));
 
     return implode('', [...$digits, ...$others]);
 }

@@ -59,9 +59,9 @@ $digitsFirstResult = Services\moveDigitsFirst('book2026swap99');
     <h2>Роки видання книг, не менші за <?= $minPublishYear ?></h2>
     <p>Усі згенеровані роки: <?= implode(', ', $publishYears) ?></p>
     <ul>
-        <?php foreach ($filteredYears as $year): ?>
+        <?php foreach ($filteredYears as $year) { ?>
             <li><?= $year ?></li>
-        <?php endforeach; ?>
+        <?php } ?>
     </ul>
 
     <h2>Знижка</h2>
