@@ -1,0 +1,54 @@
+@'
+@startuml
+left to right direction
+title BookSwap Platform - Use Case Diagram
+
+actor "Guest" as G
+actor "Reader" as R
+actor "Administrator" as A
+
+G <|-- R
+R <|-- A
+
+rectangle "BookSwap Online Platform" {
+  usecase "Browse Book Catalog" as UC_Browse
+  usecase "Search by Title" as UC_SearchTitle
+  usecase "Search by Genre & City" as UC_SearchFilter
+  usecase "Register Account" as UC_Register
+  
+  usecase "Add Book Copy" as UC_AddCopy
+  usecase "Request Book Exchange" as UC_Request
+  usecase "Offer Counter-Exchange" as UC_Counter
+  usecase "Add to Wishlist" as UC_Wishlist
+  usecase "Confirm Book Return" as UC_Confirm
+  usecase "Select Delivery Method" as UC_Delivery
+  usecase "Check Copy Availability" as UC_CheckAvail
+  
+  usecase "Manage Categories & Books" as UC_ManageBooks
+  usecase "Moderate Book Copies" as UC_Moderate
+  usecase "Resolve User Disputes" as UC_Disputes
+  usecase "View Platform Reports" as UC_Reports
+
+  UC_SearchTitle --|> UC_Browse
+  UC_SearchFilter --|> UC_Browse
+
+  G -- UC_Browse
+  G -- UC_Register
+
+  R -- UC_AddCopy
+  R -- UC_Request
+  R -- UC_Wishlist
+  R -- UC_Confirm
+
+  UC_Counter ..> UC_Request : <<extend>>
+  UC_Request ..> UC_CheckAvail : <<include>>
+  UC_Request ..> UC_Delivery : <<include>>
+  UC_AddCopy ..> UC_CheckAvail : <<include>>
+
+  A -- UC_ManageBooks
+  A -- UC_Moderate
+  A -- UC_Disputes
+  A -- UC_Reports
+}
+@enduml
+'@ | Set-Content -Path docs\use-case.puml -Encoding utf8
