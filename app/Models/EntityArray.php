@@ -28,16 +28,16 @@ $bookCopy = [
 <body>
     <h2>Індексний масив жанрів книг</h2>
     <ul>
-        <?php foreach ($bookGenres as $genre): ?>
+        <?php foreach ($bookGenres as $genre) { ?>
             <li><?= htmlspecialchars($genre, ENT_QUOTES, 'UTF-8') ?></li>
-        <?php endforeach; ?>
+        <?php } ?>
     </ul>
 
     <h2>Асоціативний масив примірника книги (BookCopy)</h2>
     <ul>
-        <?php foreach ($bookCopy as $key => $value): ?>
+        <?php foreach ($bookCopy as $key => $value) { ?>
             <li><strong><?= htmlspecialchars((string) $key, ENT_QUOTES, 'UTF-8') ?>:</strong> <?= htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8') ?></li>
-        <?php endforeach; ?>
+        <?php } ?>
     </ul>
 </body>
 </html>
